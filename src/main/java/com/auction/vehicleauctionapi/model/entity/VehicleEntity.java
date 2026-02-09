@@ -1,5 +1,7 @@
 package com.auction.vehicleauctionapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -18,6 +20,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class VehicleEntity {
     @Id
     @Column(length = 32, nullable = false, updatable = false)

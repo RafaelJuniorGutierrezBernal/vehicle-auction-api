@@ -3,6 +3,7 @@ package com.auction.vehicleauctionapi.model.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,6 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Table(name = "Sales")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class SaleEntity{
 
     @Id
