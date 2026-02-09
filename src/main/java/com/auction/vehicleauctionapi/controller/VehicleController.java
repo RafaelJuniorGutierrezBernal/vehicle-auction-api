@@ -22,21 +22,22 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VehicleController {
 
-    private final VehicleService service;
+    private final VehicleService vehicleService;
 
     @PostMapping
-    public ResponseEntity<VehicleEntity> create(@Valid @RequestBody VehicleDTO dto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto))
+    public ResponseEntity<VehicleEntity> create(@Valid @RequestBody VehicleDTO vehicleDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(vehicleService.create(vehicleDTO))
         ;
     }
 
     @GetMapping("/{vin}")
     public VehicleEntity get(@PathVariable String vin){
-        return service.getByVin(vin);
+        return vehicleService.getByVin(vin);
     }
 
     @GetMapping
     public List<VehicleEntity>list(){
-        return service.list();
+        return vehicleService.list();
     }
+
 }

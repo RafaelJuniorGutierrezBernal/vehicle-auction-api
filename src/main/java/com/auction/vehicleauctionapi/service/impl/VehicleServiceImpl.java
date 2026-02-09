@@ -16,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class VehicleServiceImpl implements VehicleService{
-    private final VehicleRepository repo;
+    private final VehicleRepository vehicleRepository;
 
     @Override
     public VehicleEntity create(VehicleDTO dto) {
        String vin = dto.getVin().trim();
-       if(repo.existsByVin(vin)) {
+       if(vehicleRepository.existsByVin(vin)) {
         throw new IllegalArgumentException("Vehicle with VIN " + vin + " already exists.");
        }
          VehicleEntity entity = VehicleEntity.builder()
@@ -39,20 +39,18 @@ public class VehicleServiceImpl implements VehicleService{
                 .interior(dto.getInterior())
                 .build();
 
-        return repo.save(entity);
+        return vehicleRepository.save(entity);
     }
 
     @Override
     public VehicleEntity getByVin(String vin) {
-        return repo.findById(vin)
+        return vehicleRepository.findById(vin)
                 .orElseThrow(() -> new EntityNotFoundException("Vehicle whith vin: " +vin));  
     }
 
     @Override
     public List<VehicleEntity> list() {
-       return repo.findAll();
+       return vehicleRepository.findAll();
     }
-
-
-    
+      
 }
