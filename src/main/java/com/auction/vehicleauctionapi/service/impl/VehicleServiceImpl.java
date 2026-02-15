@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.auction.vehicleauctionapi.model.dto.VehicleDTO;
+import com.auction.vehicleauctionapi.mapper.VehicleMapper;
+import com.auction.vehicleauctionapi.model.dto.request.VehicleReqDTO;
+import com.auction.vehicleauctionapi.model.dto.response.VehicleRespDTO;
 import com.auction.vehicleauctionapi.model.entity.VehicleEntity;
 import com.auction.vehicleauctionapi.repository.VehicleRepository;
 import com.auction.vehicleauctionapi.service.VehicleService;
@@ -17,40 +19,42 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class VehicleServiceImpl implements VehicleService{
     private final VehicleRepository vehicleRepository;
+    private final VehicleMapper vehicleMapper;
 
     @Override
-    public VehicleEntity create(VehicleDTO dto) {
+    public VehicleRespDTO create(VehicleReqDTO dto) {
        String vin = dto.getVin().trim();
        if(vehicleRepository.existsByVin(vin)) {
         throw new IllegalArgumentException("Vehicle with VIN " + vin + " already exists.");
        }
-         VehicleEntity entity = VehicleEntity.builder()
-          .vin(vin)
-                .year(dto.getYear())
-                .make(dto.getMake())
-                .model(dto.getModel())
-                .trim(dto.getTrim())
-                .body(dto.getBody())
-                .transmission(dto.getTransmission())
-                .state(dto.getState())
-                .condition(dto.getCondition())
-                .odometer(dto.getOdometer())
-                .color(dto.getColor())
-                .interior(dto.getInterior())
-                .build();
-
-        return vehicleRepository.save(entity);
+        VehicleEntity entity = vehicleMapper.toEntity(dto);
+        entity = vehicleRepository.save(entity);
+        return vehicleMapper.toResponseDTO(entity);
     }
 
     @Override
-    public VehicleEntity getByVin(String vin) {
-        return vehicleRepository.findById(vin)
-                .orElseThrow(() -> new EntityNotFoundException("Vehicle whith vin: " +vin));  
+    public VehicleRespDTO getByVin(String vin) {
+        return vehicleMapper.toResponseDTO(vehicleRepository.findById(vin).
+        orElseThrow(EntityNotFoundException::new));
     }
 
     @Override
-    public List<VehicleEntity> list() {
-       return vehicleRepository.findAll();
+    public List<VehicleRespDTO> list() {
+        return vehicleRepository.findAll().stream()
+        .map(vehicleMapper::toResponseDTO)
+        .toList();
     }
-      
+    @Override
+    public void deleteByVin(String vin){
+        vehicleRepository.deleteById(vin);
+    }
+    @Override
+    public VehicleRespDTO updateVehicle (String vin, VehicleReqDTO vehicleReqDTO) {
+        VehicleEntity existingVehicle = vehicleRepository.findById(vin)
+        .orElseThrow(()->new EntityNotFoundException("Vehicle whith VIN: "+ vin +" not found"));
+        vehicleMapper.updateEntityFromDTO(vehicleReqDTO, existingVehicle);
+        existingVehicle = vehicleRepository.save(existingVehicle);
+        return vehicleMapper.toResponseDTO(existingVehicle);
+
+    }
 }

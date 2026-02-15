@@ -3,12 +3,15 @@ package com.auction.vehicleauctionapi.service;
 
 import java.util.List;
 
-import com.auction.vehicleauctionapi.model.dto.VehicleDTO;
-import com.auction.vehicleauctionapi.model.entity.VehicleEntity;
+import com.auction.vehicleauctionapi.model.dto.request.VehicleReqDTO;
+import com.auction.vehicleauctionapi.model.dto.response.VehicleRespDTO;
+
 
 public interface VehicleService {
-    VehicleEntity create(VehicleDTO dto);
-    VehicleEntity getByVin(String vin);
-    List<VehicleEntity> list();
+    void deleteByVin(String vin);
+    VehicleRespDTO create(VehicleReqDTO dto);
+    VehicleRespDTO getByVin(String vin);
+    List<VehicleRespDTO> list();
+    VehicleRespDTO updateVehicle(String vin, VehicleReqDTO vehicleReqDTO);
 }
 

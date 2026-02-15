@@ -2,10 +2,13 @@ package com.auction.vehicleauctionapi.service;
 
 import java.util.List;
 
-import com.auction.vehicleauctionapi.model.dto.SaleDTO;
-import com.auction.vehicleauctionapi.model.entity.SaleEntity;
+import com.auction.vehicleauctionapi.model.dto.request.SaleReqDTO;
+import com.auction.vehicleauctionapi.model.dto.response.SaleRespDTO;
+
 public interface SaleService {
-    SaleEntity create(SaleDTO dto);
-    SaleEntity getById(Long Id);
-    List<SaleEntity> list();
+    void deleteById(Long id);
+    SaleRespDTO create(SaleReqDTO dto);
+    SaleRespDTO getById(Long id);
+    List<SaleRespDTO> list();
+    SaleRespDTO updateSale(Long id, SaleReqDTO saleReqDTO);
 }

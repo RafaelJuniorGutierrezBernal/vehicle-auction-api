@@ -25,7 +25,6 @@ public class VehicleEntity {
     @Id
     @Column(length = 32, nullable = false, updatable = false)
     private String vin;
-    
     @Column(name = "vehicle_year")
     private Integer year;
     private String make;

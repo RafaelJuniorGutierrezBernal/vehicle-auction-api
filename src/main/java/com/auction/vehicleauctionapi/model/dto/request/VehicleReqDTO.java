@@ -1,4 +1,4 @@
-package com.auction.vehicleauctionapi.model.dto;
+package com.auction.vehicleauctionapi.model.dto.request;
 
 
 import jakarta.validation.constraints.Min;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor @AllArgsConstructor
 @Builder
 @Data
-public class VehicleDTO {
+public class VehicleReqDTO {
     @NotBlank(message = "VIN is required")
     private String vin;
     

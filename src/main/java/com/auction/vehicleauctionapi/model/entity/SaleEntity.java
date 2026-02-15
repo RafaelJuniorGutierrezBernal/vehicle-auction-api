@@ -39,7 +39,6 @@ public class SaleEntity{
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "vehicle_vin", referencedColumnName = "vin", nullable = false)
     private VehicleEntity vehicle;
-
     @Column(nullable = false)
     private String seller;
 

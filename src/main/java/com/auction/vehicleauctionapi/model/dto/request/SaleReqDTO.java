@@ -1,4 +1,4 @@
-package com.auction.vehicleauctionapi.model.dto;
+package com.auction.vehicleauctionapi.model.dto.request;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor @AllArgsConstructor
 @Builder
 @Data
-public class SaleDTO {
+public class SaleReqDTO {
     
     private Long id;
     @NotBlank(message = "Seller is Required")
@@ -25,7 +25,6 @@ public class SaleDTO {
     private BigDecimal sellingPrice;
     @NotNull(message = "saleDate Is Required")
     private LocalDate saleDate;
-
     @NotBlank(message = "vehicleVin is required")
     private String vehicleVin;
 
