@@ -1,16 +1,20 @@
 export interface Vehicle {
-  id: number;
-  brand: string;
+  vin: string;                   
+  make: string;                  
   model: string;
   year: number;
-  mileage: number; 
-  color: string; 
-  fuelType: string; 
-  transmission: string; 
-  description: string; 
-  imageUrl: string; 
-  startingPrice: number; 
-  currentPrice: number; 
-  auctionEndDate: Date;
-  status: "active" | "closed" | "pending";
+  trim?: string;
+  body?: string;
+  transmission?: string;
+  state?: string;
+  condition?: number;
+  odometer?: number;             
+  color?: string;
+  interior?: string;
+  description?: string;
+  imageUrl?: string;
+  startingPrice?: number;
+  currentPrice?: number;
+  auctionEndDate?: Date;
+  status?: "active" | "closed" | "pending";
 }
