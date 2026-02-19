@@ -1,6 +1,6 @@
-# Vehicle Auction API
+# Vehicle Managment API
 
-API REST para gestión de subastas de vehículos, Permite administrar el catálogo de vehículos y las ventas asociadas mediante autenticación OAuth2 con Keycloak.
+API REST para gestión de Venta de vehículos, Permite administrar el catálogo de vehículos y las ventas asociadas mediante autenticación OAuth2 con Keycloak.
 
 ## Tecnologías
 
