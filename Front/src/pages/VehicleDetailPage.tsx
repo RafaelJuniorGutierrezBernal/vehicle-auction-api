@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import VehicleDetail from '../components/vehicle/VehicleDetail';
 import type { Vehicle } from '../models';
-import { apiService } from '../services/api';
+import { vehicleService } from '../services/VehicleService';
 
-const AuctionDetail = () => {
+const VehicleDetailPage = () => {
     const { vin } = useParams();
     const navigate = useNavigate();
     const [vehicle, setVehicle] = useState<Vehicle | null>(null);
@@ -16,7 +16,7 @@ const AuctionDetail = () => {
             if (!vin) return;
             try {
                 setLoading(true);
-                const data = await apiService.getVehicleByVin(vin);
+                const data = await vehicleService.getVehicleByVin(vin);
                 setVehicle(data);
                 setError(null);
             } catch (err) {
@@ -63,4 +63,4 @@ const AuctionDetail = () => {
     );
 };
 
-export default AuctionDetail;
+export default VehicleDetailPage;

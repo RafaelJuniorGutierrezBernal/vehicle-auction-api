@@ -1,14 +1,18 @@
+import { useNavigate } from "react-router-dom";
 import type { Vehicle } from "../../models";
 import Button from "../common/Button";
-import { apiService } from "../../services/api";
+import { saleService } from "../../services/SaleService";
 import keycloak from "../../keycloak";
+import { vehicleService } from "../../services/VehicleService";
 
 interface VehicleDetailProps {
     vehicle: Vehicle;
 }
 
 const VehicleDetail = ({ vehicle }: VehicleDetailProps) => {
+    const navigate = useNavigate();
     const isAdmin = keycloak.hasResourceRole('ADMIN') || keycloak.hasRealmRole('ADMIN');
+    const isSold = vehicle.status === 'closed';
     
     const formatPrice = (price?: number): string => {
         if (price === undefined) return 'N/A';
@@ -23,12 +27,19 @@ const VehicleDetail = ({ vehicle }: VehicleDetailProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
             <div className="space-y-4">
-                <div className="aspect-video w-full rounded-2xl overflow-hidden shadow-md">
+                <div className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-md">
                     <img 
                         src={vehicle.imageUrl ?? '/placeholder-vehicle.png'} 
                         alt={`${vehicle.make} ${vehicle.model}`} 
                         className="w-full h-full object-cover"
                     />
+                    {isSold && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                            <span className="text-white text-4xl font-black uppercase tracking-widest border-4 border-white px-6 py-2 rotate-12">
+                                Vendido
+                            </span>
+                        </div>
+                    )}
                 </div>
                 <div className="grid grid-cols-4 gap-2">
                     {[1, 2, 3, 4].map((i) => (
@@ -64,29 +75,59 @@ const VehicleDetail = ({ vehicle }: VehicleDetailProps) => {
                             </Button>
                         </div>
                     ) : isAdmin ? (
-                        <Button 
-                            variant="confirmacionPuja" 
-                            className="w-full text-lg py-4"
-                            onClick={async () => {
-                                if (window.confirm(`¿Estás seguro de que deseas confirmar la venta de este ${vehicle.make} ${vehicle.model}?`)) {
-                                    try {
-                                        await apiService.createSale({
-                                            seller: keycloak.tokenParsed?.preferred_username || "Sistema AutoDeal",
-                                            mmr: 0,
-                                            sellingPrice: vehicle.currentPrice || 0,
-                                            saleDate: new Date().toISOString().split('T')[0],
-                                            vehicleVin: vehicle.vin
-                                        });
-                                        alert('¡Venta realizada con éxito!');
-                                    } catch (error) {
-                                        console.error('Error al vender:', error);
-                                        alert('Hubo un error al procesar la venta.');
+                        <div className="space-y-3">
+                            <Button 
+                                variant="primary" 
+                                className="w-full text-lg py-4"
+                                disabled={isSold}
+                                onClick={async () => {
+                                    if (window.confirm(`¿Estás seguro de que deseas confirmar la venta de este ${vehicle.make} ${vehicle.model}?`)) {
+                                        try {
+                                            await saleService.createSale({
+                                                seller: keycloak.tokenParsed?.preferred_username || "Sistema AutoDeal",
+                                                mmr: 0,
+                                                sellingPrice: vehicle.currentPrice || 0,
+                                                saleDate: new Date(),
+                                                vehicleVin: vehicle.vin
+                                            });
+                                            alert('¡Venta realizada con éxito!');
+                                            navigate("/"); 
+                                        } catch (error) {
+                                            console.error('Error al vender:', error);
+                                            alert('Hubo un error al procesar la venta.');
+                                        }
                                     }
-                                }
-                            }}
-                        >
-                            Confirmar Venta
-                        </Button>
+                                }}
+                            >
+                                {isSold ? 'Vehículo Vendido' : 'Confirmar Venta Directa'}
+                            </Button>
+
+                            <div className="grid grid-cols-2 gap-2 mt-4">
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => navigate(`/edit-vehicle/${vehicle.vin}`)}
+                                >
+                                    Editar Info
+                                </Button>
+                                <Button
+                                    variant="danger"
+                                    onClick={async () => {
+                                        if (window.confirm('¿Está seguro de que desea eliminar el vehículo?')) {
+                                            try {
+                                                await vehicleService.deleteVehicleByVin(vehicle.vin);
+                                                alert('¡Vehículo eliminado con éxito!');
+                                                navigate("/");
+                                            } catch (error) {
+                                                console.error('Error al eliminar:', error);
+                                                alert('No se pudo eliminar el vehículo. Por favor, inténtalo de nuevo.');
+                                            }
+                                        }
+                                    }}
+                                >
+                                    Eliminar
+                                </Button>
+                            </div>
+                        </div>
                     ) : (
                         <div className="bg-yellow-50 border border-yellow-100 p-4 rounded-xl text-yellow-700 text-sm italic">
                             Tu cuenta no tiene permisos de administrador para registrar ventas.
@@ -104,9 +145,9 @@ const VehicleDetail = ({ vehicle }: VehicleDetailProps) => {
                         <div className="border rounded-xl p-3">
                             <p className="text-xs text-gray-500 uppercase">Estado</p>
                             <p className="font-semibold">
-                                {vehicle.status === 'active' ? 'Activo' : 
+                                {vehicle.status === 'active' ? 'Disponible' : 
                                  vehicle.status === 'pending' ? 'Pendiente' : 
-                                 vehicle.status === 'closed' ? 'Cerrado' : 'N/A'}
+                                 vehicle.status === 'closed' ? 'Vendido' : 'N/A'}
                             </p>
                         </div>
                     </div>

@@ -18,21 +18,6 @@ function VehicleCard({ vehicle, onViewDetails }: VehicleCardProps) {
         }).format(price)
     }
 
-    const getTimeRemaining = (endDate?: Date): string => {
-        if (!endDate) return 'Sin fecha';
-        const now = new Date()
-        const end = new Date(endDate)
-        const diff = end.getTime() - now.getTime()
-
-        if (diff <= 0) return 'Subasta Finalizada'
-
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-
-        if (days > 0) return `${days}d ${hours}h restantes`
-        return `${hours}h restantes`
-    }
-
     const getStatusColor = (status: string = 'active'): string => {
         switch (status) {
             case 'active': return 'bg-green-500'
@@ -44,8 +29,8 @@ function VehicleCard({ vehicle, onViewDetails }: VehicleCardProps) {
 
     const getStatusText = (status: string = 'active'): string => {
         switch (status) {
-            case 'active': return 'Activa'
-            case 'closed': return 'Cerrada'
+            case 'active': return 'Disponible'
+            case 'closed': return 'Vendido'
             case 'pending': return 'Pendiente'
             default: return status
         }
@@ -82,27 +67,14 @@ function VehicleCard({ vehicle, onViewDetails }: VehicleCardProps) {
                 <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                     {vehicle.description || 'Sin descripción disponible'}
                 </p>
-                {/* Separador */}
                 <div className="border-t border-gray-200 my-3"></div>
-
                 {/* Precios */}
                 <div className="mb-3">
-                    <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm text-gray-700">Precio Inicial: </span>
-                        <span className="text-sm text-gray-700">{formatPrice(vehicle.startingPrice)}</span>
-                    </div>
                     <div className="flex justify-between items-center">
-                        <span className="text-sm font-semibold text-gray-800">Puja actual:</span>
+                        <span className="text-sm font-semibold text-gray-800">Precio Actual:</span>
                         <span className="text-xl font-bold text-blue-600">{formatPrice(vehicle.currentPrice)}</span>
                     </div>
                 </div>
-                {/* Tiempo restante */}
-                <div className="bg-gray-100 rounded-lg p-2 mb-4 text-center">
-                    <span className="text-sm text-gray-700">
-                        {getTimeRemaining(vehicle.auctionEndDate)}
-                    </span>
-                </div>
-
                 {/* Boton de accion */}
                 <Button
                     variant="primary"

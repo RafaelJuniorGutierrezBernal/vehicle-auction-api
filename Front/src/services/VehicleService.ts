@@ -8,15 +8,8 @@ const getHeaders = () => ({
     'Authorization': keycloak.token ? `Bearer ${keycloak.token}` : '',
 });
 
-export interface SaleRequest {
-    seller: string;
-    mmr: number;
-    sellingPrice: number;
-    saleDate: string;
-    vehicleVin: string;
-}
 
-export const apiService = {
+export const vehicleService = {
 
     createVehicle: async (vehicleData: Vehicle): Promise<Vehicle> =>{
         const { version, ...rest } = vehicleData as any;
@@ -51,14 +44,27 @@ export const apiService = {
         return response.json();
     },
 
-    
-    createSale: async (saleData: SaleRequest): Promise<any> => {
-        const response = await fetch(`${API_BASE_URL}/sales`, {
-            method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify(saleData),
+    deleteVehicleByVin: async (vin : string): Promise<void> => {
+        const response = await fetch(`${API_BASE_URL}/vehicles/${vin}`, {
+            method: 'DELETE',
+            headers: getHeaders()
         });
-        if (!response.ok) throw new Error('Error al procesar la venta');
+        if (!response.ok) throw new Error('Error al eliminar el vehículo');
+    },
+
+    updateVehicle: async (vin: string, vehicleData: Vehicle): Promise<Vehicle> => {
+        const { version, ...rest } = vehicleData as any;
+        const dataToUpdate = { ...rest, trim: version };
+
+        const response = await fetch(`${API_BASE_URL}/vehicles/${vin}`, {
+            method: 'PUT',
+            headers: getHeaders(),
+            body: JSON.stringify(dataToUpdate),
+        });
+        if (!response.ok) {
+            const errorBody = await response.json().catch(() => ({}));
+            throw new Error(errorBody.message || 'Error al actualizar el vehículo');
+        }
         return response.json();
     }
 };

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Vehicle } from '../models';
 import VehicleList from '../components/vehicle/VehicleList';
-import { apiService } from '../services/api';
+import { vehicleService } from '../services/VehicleService';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Home = () => {
     const fetchVehicles = async () => {
       try {
         setLoading(true);
-        const data = await apiService.getVehicles();
+        const data = await vehicleService.getVehicles();
         setVehicles(data);
         setError(null);
       } catch (err) {
