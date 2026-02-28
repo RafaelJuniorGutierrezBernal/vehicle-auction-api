@@ -30,22 +30,26 @@ const Home = () => {
 
   return (
     <>
-      <div className="mb-8">
-        <h2 className="text-3xl font-extrabold text-gray-900">Catálogo de Vehículos</h2>
-        <p className="mt-2 text-gray-600">Explora nuestro inventario disponible para venta inmediata.</p>
+    <div className="mb-12 pl-12 text-right">
+      <div className="inline-block">
+        <h1 className="text-4xl lg:text-5xl font-bold text-blue-800">
+          Acerca de Vehicle Management Company
+        </h1>
+        <p className="mt-6 mr-4 font-semibold text-gray-800 leading-relaxed max-w-3xl mx-auto">
+          Vehicle Management Company es el socio confiable de cientos de concesionarios a lo largo de América Latina. Desde 2010 hemos desarrollado
+          soluciones de software empresarial que automatizan la gestión de inventarios, la facturación, la atención al cliente y los análisis de
+          desempeño. Nuestra plataforma está diseñada para adaptarse a concesionarios pequeños y grandes, con herramientas avanzadas para seguimiento
+          de ventas, financiamiento y marketing digital. A través de alianzas estratégicas con fabricantes y servicios financieros, proporcionamos
+          a nuestros clientes una cadena de valor completa que incrementa la eficiencia operativa y maximiza la rentabilidad.
+        </p>
+        <h2 className="mt-4 text-2xl font-bold text-blue-700">Nuestra Misión</h2>
+        <p className="mt-4 mr-4 font-semibold text-gray-700 leading-relaxed max-w-3xl mx-auto">
+          Comprometidos con la innovación y el soporte permanente, ofrecemos capacitación continua y un equipo de asistencia 24/7. Nuestro objetivo
+          es transformar la manera en la que los concesionarios gestionan sus operaciones, brindando una plataforma segura, escalable y fácil de usar
+          que impulsa el crecimiento sostenible de su negocio.
+        </p>
       </div>
-
-      {error && (
-        <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-8">
-          <p className="text-red-700">{error}</p>
-        </div>
-      )}
-
-      <VehicleList 
-        vehicles={vehicles} 
-        loading={loading}
-        onVehicleClick={(v) => navigate(`/vehicle/${v.vin}`)} 
-      />
+    </div>
     </>
   );
 };

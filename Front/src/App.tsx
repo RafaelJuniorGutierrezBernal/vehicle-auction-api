@@ -6,6 +6,7 @@ import NavBar from "./components/layout/NavBar";
 import Footer from "./components/layout/Footer";
 import AddVehicle from "./components/vehicle/AddVehicle";
 import EditVehicle from "./components/vehicle/EditVehicle";
+import SaleHistory from "./pages/SaleHistory";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/vehicle/:vin" element={<VehicleDetailPage />} />
           <Route path="/edit-vehicle/:vin" element={<EditVehicle />} />
           <Route path="/add-vehicle" element={<AddVehicle />} />
+          <Route path="/sales-history" element={<SaleHistory />} />
         </Routes>
       </main>
 

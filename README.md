@@ -8,7 +8,7 @@ API REST para gestión de subastas de vehículos, Permite administrar el catálo
 - Spring Boot 3.2
 - Spring Security (OAuth2 Resource Server, JWT)
 - Spring Data JPA
-- H2 Database
+- PostgreSQL
 - MapStruct
 - SpringDoc OpenAPI (Swagger)
 - Lombok
@@ -21,13 +21,12 @@ API REST para gestión de subastas de vehículos, Permite administrar el catálo
 
 ## Configuración
 
-La aplicación corre por defecto en el puerto 8081. La base de datos H2 se inicia en memoria.
+La aplicación corre por defecto en el puerto 8081.
 
 Variables relevantes en `application.properties`:
 
 - `server.port`: Puerto de la API (8081)
 - `spring.security.oauth2.resourceserver.jwt.issuer-uri`: URI del realm de Keycloak
-- `spring.datasource.url`: URL de conexión a H2
 
 ## Ejecución
 
@@ -72,18 +71,6 @@ Una vez iniciada la aplicación, la documentación interactiva está disponible 
 ```
 http://localhost:8081/swagger-ui.html
 ```
-
-## Base de datos H2
-
-La consola H2 está habilitada en desarrollo:
-
-```
-http://localhost:8081/h2-console
-```
-
-- JDBC URL: `jdbc:h2:mem:auctiondb`
-- Usuario: `sa`
-- Contraseña: (vacío)
 
 ## CORS
 
